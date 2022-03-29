@@ -241,7 +241,6 @@ func (m *Manager) init() {
 			name = fsPath
 			path = name[len(m.options.Path)+1:]
 			if len(path) == 0 {
-				fmt.Println("skipping path", path)
 				return nil
 			}
 			array = strings.Split(path, "/")
@@ -253,8 +252,9 @@ func (m *Manager) init() {
 			if m.data[lang] == nil {
 				m.data[lang] = make(map[string]string)
 			}
-			content, err := m.options.FS.ReadFile(fsPath)
+			content, err := m.options.FS.ReadFile(name)
 			if err != nil {
+				intlog.Errorf("load i18n file '%s' failed: %v", name, err)
 				return nil
 			}
 			if j, err := gjson.LoadContent(content); err == nil {
