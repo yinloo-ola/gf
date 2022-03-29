@@ -9,9 +9,11 @@ package gi18n
 import (
 	"errors"
 	"fmt"
-	"github.com/gogf/gf/internal/intlog"
+	"io/fs"
 	"strings"
 	"sync"
+
+	"github.com/gogf/gf/internal/intlog"
 
 	"github.com/gogf/gf/os/gfsnotify"
 
@@ -20,6 +22,8 @@ import (
 	"github.com/gogf/gf/util/gconv"
 
 	"github.com/gogf/gf/encoding/gjson"
+
+	"embed"
 
 	"github.com/gogf/gf/os/gfile"
 	"github.com/gogf/gf/os/gres"
@@ -38,6 +42,7 @@ type Options struct {
 	Path       string   // I18n files storage path.
 	Language   string   // Local language.
 	Delimiters []string // Delimiters for variable parsing.
+	FS         *embed.FS
 }
 
 var (
@@ -68,6 +73,13 @@ func New(options ...Options) *Manager {
 	}
 	intlog.Printf(`New: %#v`, m)
 	return m
+}
+
+func EmbedFsOption(fs embed.FS, path string) Options {
+	return Options{
+		FS:   &fs,
+		Path: path,
+	}
 }
 
 // DefaultOptions creates and returns a default options for i18n manager.
@@ -210,7 +222,51 @@ func (m *Manager) init() {
 
 	m.mu.Lock()
 	defer m.mu.Unlock()
-	if gres.Contains(m.options.Path) {
+	if m.options.FS != nil {
+
+		m.data = make(map[string]map[string]string)
+		fs.WalkDir(m.options.FS, m.options.Path, func(fsPath string, d fs.DirEntry, err error) error {
+			if err != nil {
+				return nil
+			}
+			if d.IsDir() {
+				return nil
+			}
+			var (
+				path  string
+				name  string
+				lang  string
+				array []string
+			)
+			name = fsPath
+			path = name[len(m.options.Path)+1:]
+			if len(path) == 0 {
+				fmt.Println("skipping path", path)
+				return nil
+			}
+			array = strings.Split(path, "/")
+			if len(array) > 1 {
+				lang = array[0]
+			} else {
+				lang = gfile.Name(array[0])
+			}
+			if m.data[lang] == nil {
+				m.data[lang] = make(map[string]string)
+			}
+			content, err := m.options.FS.ReadFile(fsPath)
+			if err != nil {
+				return nil
+			}
+			if j, err := gjson.LoadContent(content); err == nil {
+				for k, v := range j.Map() {
+					m.data[lang][k] = gconv.String(v)
+				}
+			} else {
+				intlog.Errorf("load i18n file '%s' failed: %v", name, err)
+			}
+			return nil
+		})
+	} else if gres.Contains(m.options.Path) {
 		files := gres.ScanDirFile(m.options.Path, "*.*", true)
 		if len(files) > 0 {
 			var (

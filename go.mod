@@ -1,6 +1,6 @@
 module github.com/gogf/gf
 
-go 1.11
+go 1.16
 
 require (
 	github.com/BurntSushi/toml v0.3.1
@@ -15,6 +15,5 @@ require (
 	go.opentelemetry.io/otel v0.16.0
 	golang.org/x/net v0.0.0-20201031054903-ff519b6c9102
 	golang.org/x/text v0.3.4
-	golang.org/x/time v0.0.0-20210220033141-f8bda1e9f3ba // indirect
 	gopkg.in/yaml.v3 v3.0.0-20200313102051-9f266ea9e77c
 )
