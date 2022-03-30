@@ -7,6 +7,7 @@
 package gi18n_test
 
 import (
+	"embed"
 	"testing"
 
 	"github.com/gogf/gf/os/gres"
@@ -25,6 +26,62 @@ import (
 
 	_ "github.com/gogf/gf/os/gres/testdata/data"
 )
+
+//go:embed testdata/i18n-dir
+var fsDir embed.FS
+
+//go:embed testdata/i18n
+var fs embed.FS
+
+//go:embed testdata/i18n-file
+var fsFile embed.FS
+
+func Test_FS(t *testing.T) {
+	gtest.C(t, func(t *gtest.T) {
+		i18n := gi18n.New(gi18n.EmbedFsOption(fsDir, "testdata/i18n-dir"))
+		i18n.SetLanguage("none")
+		t.Assert(i18n.T("{#hello}{#world}"), "{#hello}{#world}")
+
+		i18n.SetLanguage("ja")
+		t.Assert(i18n.T("{#hello}{#world}"), "こんにちは世界")
+
+		i18n.SetLanguage("zh-CN")
+		t.Assert(i18n.T("{#hello}{#world}"), "你好世界")
+		i18n.SetDelimiters("{$", "}")
+		t.Assert(i18n.T("{#hello}{#world}"), "{#hello}{#world}")
+		t.Assert(i18n.T("{$hello}{$world}"), "你好世界")
+	})
+
+	gtest.C(t, func(t *gtest.T) {
+		i18n := gi18n.New(gi18n.EmbedFsOption(fs, "testdata/i18n"))
+		i18n.SetLanguage("none")
+		t.Assert(i18n.T("{#hello}{#world}"), "{#hello}{#world}")
+
+		i18n.SetLanguage("ja")
+		t.Assert(i18n.T("{#hello}{#world}"), "こんにちは世界")
+
+		i18n.SetLanguage("zh-CN")
+		t.Assert(i18n.T("{#hello}{#world}"), "你好世界")
+		i18n.SetDelimiters("{$", "}")
+		t.Assert(i18n.T("{#hello}{#world}"), "{#hello}{#world}")
+		t.Assert(i18n.T("{$hello}{$world}"), "你好世界")
+	})
+
+	gtest.C(t, func(t *gtest.T) {
+		i18n := gi18n.New(gi18n.EmbedFsOption(fsFile, "testdata/i18n-file"))
+		i18n.SetLanguage("none")
+		t.Assert(i18n.T("{#hello}{#world}"), "{#hello}{#world}")
+
+		i18n.SetLanguage("ja")
+		t.Assert(i18n.T("{#hello}{#world}"), "こんにちは世界")
+
+		i18n.SetLanguage("zh-CN")
+		t.Assert(i18n.T("{#hello}{#world}"), "你好世界")
+		i18n.SetDelimiters("{$", "}")
+		t.Assert(i18n.T("{#hello}{#world}"), "{#hello}{#world}")
+		t.Assert(i18n.T("{$hello}{$world}"), "你好世界")
+	})
+}
 
 func Test_Basic(t *testing.T) {
 	gtest.C(t, func(t *gtest.T) {
