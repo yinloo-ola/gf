@@ -68,6 +68,12 @@ func I18n(name ...string) *gi18n.Manager {
 	return gins.I18n(name...)
 }
 
+// I18n returns an instance of gi18n.Manager.
+// The parameter <name> is the name for the instance.
+func I18nOptions(o gi18n.Options) *gi18n.Manager {
+	return gins.I18nOptions(o)
+}
+
 // Res is alias of Resource.
 // See Resource.
 func Res(name ...string) *gres.Resource {
