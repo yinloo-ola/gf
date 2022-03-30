@@ -12,6 +12,11 @@ var (
 	defaultManager = Instance()
 )
 
+// SetDefaultManager sets the default manager for i18n.
+func SetDefaultManager(m *Manager) {
+	defaultManager = m
+}
+
 // SetPath sets the directory path storing i18n files.
 func SetPath(path string) error {
 	return defaultManager.SetPath(path)
