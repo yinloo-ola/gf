@@ -106,7 +106,7 @@ func (r *Response) WriteJson(content interface{}) error {
 	// If given string/[]byte, response it directly to client.
 	switch content.(type) {
 	case string, []byte:
-		r.Header().Set("Content-Type", "application/json")
+		r.Header().Set("Content-Type", "application/json; charset=UTF-8")
 		r.Write(gconv.String(content))
 		return nil
 	}
@@ -114,7 +114,7 @@ func (r *Response) WriteJson(content interface{}) error {
 	if b, err := json.Marshal(content); err != nil {
 		return err
 	} else {
-		r.Header().Set("Content-Type", "application/json")
+		r.Header().Set("Content-Type", "application/json; charset=UTF-8")
 		r.Write(b)
 	}
 	return nil
