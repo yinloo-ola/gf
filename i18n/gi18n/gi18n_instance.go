@@ -33,10 +33,10 @@ func Instance(name ...string) *Manager {
 
 // InstanceOptions returns an instance of Resource.
 // The parameter <o> defines the options for the instance.
-func InstanceOptions(o Options) *Manager {
+func InstanceOptions(o Options, name string) *Manager {
 	key := DefaultName
-	if o.Path != "" {
-		key = o.Path
+	if name != "" {
+		key = name
 	}
 	return instances.GetOrSetFuncLock(key, func() interface{} {
 		return New(o)

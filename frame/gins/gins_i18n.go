@@ -18,6 +18,6 @@ func I18n(name ...string) *gi18n.Manager {
 
 // I18nOptions returns an instance of gi18n.Manager.
 // The parameter <o> defines the options for this instance.
-func I18nOptions(o gi18n.Options) *gi18n.Manager {
-	return gi18n.InstanceOptions(o)
+func I18nOptions(o gi18n.Options, name string) *gi18n.Manager {
+	return gi18n.InstanceOptions(o, name)
 }
