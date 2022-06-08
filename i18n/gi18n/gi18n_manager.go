@@ -240,13 +240,13 @@ func (m *Manager) init() {
 				array []string
 			)
 			name = fsPath
-			path = name[len(m.options.Path)+1:]
+			path = name
 			if len(path) == 0 {
 				return nil
 			}
 			array = strings.Split(path, "/")
 			if len(array) > 1 {
-				lang = array[0]
+				lang = array[len(array)-2]
 			} else {
 				lang = gfile.Name(array[0])
 			}
