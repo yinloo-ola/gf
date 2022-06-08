@@ -31,8 +31,8 @@ func Instance(name ...string) *Manager {
 	}).(*Manager)
 }
 
-// Instance returns an instance of Resource.
-// The parameter <name> is the name for the instance.
+// InstanceOptions returns an instance of Resource.
+// The parameter <o> defines the options for the instance.
 func InstanceOptions(o Options) *Manager {
 	key := DefaultName
 	if o.Path != "" {

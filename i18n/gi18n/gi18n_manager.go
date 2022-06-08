@@ -75,6 +75,7 @@ func New(options ...Options) *Manager {
 	return m
 }
 
+// EmbedFsOption creates and returns am options with the embeded FS
 func EmbedFsOption(fs embed.FS, path string) Options {
 	return Options{
 		FS:   &fs,
