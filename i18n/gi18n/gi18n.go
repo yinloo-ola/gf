@@ -9,7 +9,7 @@ package gi18n
 
 var (
 	// defaultManager is the default i18n instance for package functions.
-	defaultManager = Instance()
+	defaultManager *Manager
 )
 
 // SetDefaultManager sets the default manager for i18n.

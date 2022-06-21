@@ -53,7 +53,7 @@ var (
 // New creates and returns a new i18n manager.
 // The optional parameter <option> specifies the custom options for i18n manager.
 // It uses a default one if it's not passed.
-func New(options ...Options) *Manager {
+func new(options ...Options) *Manager {
 	var opts Options
 	if len(options) > 0 {
 		opts = options[0]

@@ -27,7 +27,7 @@ func Instance(name ...string) *Manager {
 		key = name[0]
 	}
 	return instances.GetOrSetFuncLock(key, func() interface{} {
-		return New()
+		return new()
 	}).(*Manager)
 }
 
@@ -39,6 +39,6 @@ func InstanceOptions(o Options, name string) *Manager {
 		key = name
 	}
 	return instances.GetOrSetFuncLock(key, func() interface{} {
-		return New(o)
+		return new(o)
 	}).(*Manager)
 }
